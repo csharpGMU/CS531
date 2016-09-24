@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #define NUMSTRINGS 10
+#define TRUE 1
 
 void getStrings(char *stringArray[],int count);
 int getOrder();
@@ -16,7 +17,11 @@ void printStrings(char *stringArray[], int size);
 int main()
 {
   char *theStrings[NUMSTRINGS];
-  int order;
+  int order, i;
+
+  //Assign null pointers to array to avoid spurious pointer
+  for(i = 0; i<NUMSTRINGS;i++)
+    theStrings[i] = NULL;
 
   printf("\nEnter %d character strings:\n\n",NUMSTRINGS);
 
@@ -42,6 +47,7 @@ void getStrings(char *stringArray[],int count)
     char *str;
     char inputStr[28];
     char *result;
+    int c;
 
     printf("Enter string %d: ",i+1);
 
@@ -52,15 +58,14 @@ void getStrings(char *stringArray[],int count)
            1 - Over-length detection*/
     result = fgets(inputStr,28,stdin);
 
-    printf("length: %d",strlen(inputStr));
+    //printf("length: %d",strlen(inputStr));
 
     //Set newline to Null
-    int c;
     for(c = 0;c < 27 && inputStr[c];c++)
       if(inputStr[c]=='\n')
         inputStr[c]='\0';
 
-    printf(" newlength: %d\n",strlen(inputStr));
+    //printf(" newlength: %d\n",strlen(inputStr));
 
     //Check if we are Over-length
     if(strlen(inputStr)>25)
@@ -74,7 +79,16 @@ void getStrings(char *stringArray[],int count)
       continue;
     }
 
-    //TODO:Check if we depulicate any strings
+    //Check if we duplicate any strings
+    for(c=0; c < i; c++)
+    {
+      if(strcmp(inputStr,stringArray[c])==0)
+      {
+        printf("Error: String duplicates one already entered; please choose another string\n");
+        i--;
+        continue;
+      }
+    }
 
     //Store our inputted strings
     str = malloc(25*(sizeof(char))); //TODO: Add catch for failed malloc
@@ -86,26 +100,55 @@ void getStrings(char *stringArray[],int count)
 
 int getOrder()
 {
+  char input;
 
-  return 0;
+  while(TRUE)
+  {
+    printf("\nPrint character strings in (A)scending or (D)escending order: ");
+
+    input = getchar();
+
+    if(input == 'A' || input == 'a')
+      return 1;
+    if(input == 'D' || input == 'd')
+      return -1;
+
+    printf("\nInvalid input - Please enter the letter 'A' or the letter 'D'");
+  }
 }
 
 void freeStrings(char *stringArray[],int count)
 {
-
-  return;
-}
-
-void stringOrder()
-{
-
+  int i;
+  for(i = 0; i<count;i++)
+    if(stringArray[i]!=NULL)
+      free(stringArray[i]);
   return;
 }
 
 void sortStrings(char *stringArray[], int size, int order)
 {
+  while(TRUE)
+  {
+    int flag = 0;
+    int i;
 
-  return;
+    for(i=0; i < size-1; i++)
+    {
+      if(strcmp(stringArray[i],stringArray[i+1]) * order > 0)
+      {
+        char *temp;
+        temp = stringArray[i];
+        stringArray[i] = stringArray[i+1];
+        stringArray[i+1] = temp;
+        flag = 1;
+      }
+    }
+    if(flag!=0)
+      continue;
+    else
+      return;
+  }
 }
 
 void printStrings(char *stringArray[], int size)
@@ -114,7 +157,22 @@ void printStrings(char *stringArray[], int size)
   for(i=0;i<size;i++)
     printf("%s\n",stringArray[i]);
 
-    //TODO: Add the part about lowest/highest
+  int high, low;
+
+  if(strcmp(stringArray[0],stringArray[size-1])>0)
+  {
+    high = size -1;
+    low = 0;
+  }
+  else
+  {
+    high = 0;
+    low = size -1;
+  }
+
+
+  printf("String with lowest ascii value: %s\n",stringArray[low]);
+  printf("String with highest ascii value: %s\n",stringArray[high]);
 
   return;
 }
