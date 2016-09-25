@@ -10,13 +10,15 @@ void	print(char**);
 
 #define NUMSTRINGS 10
 #define MAXSTR 25
+#define MINSTR 1
+
 
 int main()    
 {    
 	int  t,c,n, err,len;
 	long d,swap;
 	char *array[100];
-	char m[25];   
+	char m[MAXSTR+2];   
  	
 	n=NUMSTRINGS;
 
@@ -25,11 +27,10 @@ int main()
 	for(c=0;c<n;c++) 
 	{
 		err=0;
-		printf("Enter %d integers out of %d elements ",c+1,n);
-		fgets(m,MAXSTR,stdin);
+		printf("Enter %d string out of %d elements ",c+1,n);
+		fgets(m,MAXSTR+2,stdin);
 
 		len=strlen(m);
-
 
 		clean(m); /* Clean the string from Enter strokes */
 		
@@ -138,9 +139,12 @@ int err_chk(char *list[], char entry[], int c)
 
 
 	/* if string is longer than 25 characters */
-	if( strlen(entry)>25)
+	if( strlen(entry)>MAXSTR)
 	{
 		printf("ERROR: The string %s is longer than 25 chars, plz re-enter\n", entry);
+		
+		while((getchar())!='\n'){}	
+		
 		d=1;	
 	}
 	/* if string is NULL */
@@ -150,9 +154,9 @@ int err_chk(char *list[], char entry[], int c)
 		d=1;	
 	}
 	/* if string has a length less than 10 chars*/
-	else if(strlen(entry)<10)
+	else if(strlen(entry)<MINSTR)
 	{
-		printf("ERROR: The string length %s less than 10 chars , plz re-enter\n", entry);
+		printf("ERROR: The string length %s less than 1 char , plz re-enter\n", entry);
 		d=1;	
 	}
 	/* if string is a duplicate*/
