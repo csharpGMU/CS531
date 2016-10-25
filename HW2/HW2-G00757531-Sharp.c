@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #define PATH_TO_SHELL "/bin/sh"
 
